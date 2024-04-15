@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block contente %}
+
+<h1>Create Tasks</h1>
+
+<form action={% url "create_task" %} method="post">
+    {% csrf_token %}
+    {{form}}
+    <button>Create</button>
+</form>
+
+
+{% endblock contente %}
