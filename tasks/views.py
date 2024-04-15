@@ -32,7 +32,7 @@ def signup(request):
                 user.save()
                 print(user)
                 login(request, user)
-                return redirect('tasks')
+                return redirect('get_tasks')
             except IntegrityError:
                 return render(request, 'signup.html', {
                     'form': UserCreationForm,
@@ -61,7 +61,7 @@ def signin(request):
             })
         else:
             login(request, user)
-            return redirect('tasks')
+            return redirect('get_tasks')
 
 # * LogOut
 
@@ -74,9 +74,16 @@ def signOut(request):
 # * Create Tasks
 
 def create_tasks(request):
-    return render(request, 'create_task.html', {
-        'form': TaskForm
-    })
+    if (request.method == 'GET'):
+        return render(request, 'create_task.html', {
+            'form': TaskForm
+        })
+    else:
+        form = TaskForm(request.POST)
+        new_task = form.save(commit=False)
+        new_task.user = request.user
+        new_task.save()
+        return redirect ('get_tasks')
 
 
 # * Tasks Pending
